@@ -1,23 +1,31 @@
 export const state = () => ({
   me: null,
-  list: []
+  list: [],
+  idDuplicate: [],
+  status: [],
+  create: []
 })
 
 export const mutations = {
   getUsers (state, payload) {
     state.list = payload
   },
-  createdUser (state, payload) {
-    state.me = payload
+  createUser (state, payload) {
+    state.create = payload
+  },
+  duplicateStatus (state, payload) {
+    state.idDuplicate = payload
   }
 }
 
 export const actions = {
   getUserList ({ commit }, payload) {
-    this.$axios.post('/user/view', {
-      email: payload.email
+    this.$axios.post('/user/list', {
+      page: payload.page,
+      limit: payload.limit,
+      auth: payload.auth
     }, {
-      withCredentials: false
+      withCredentials: true
     })
       .then((res) => {
         commit('getUsers', res.data)
@@ -27,41 +35,33 @@ export const actions = {
       })
   },
   signUp ({ commit }, payload) {
-    const form = payload.data
-    const fail = {}
-    if (form.id === '') {
-      fail.msg = '아이디를 입력해주세요.'
-    }
-
-    if (form.password === '') {
-      fail.msg = '비밀번호를 입력해주세요.'
-    }
-
-    if (form.passwordCheck === '') {
-      fail.msg = '비밀번호 확인을 입력해주세요.'
-    }
-
-    if (form.email1 === '') {
-      fail.msg = '이메일을 입력해주세요.'
-    }
-
-    if (form.email2 === '') {
-      fail.msg = '이메일을 정확히 입력해주세요.'
-    }
-
     this.$axios.post('/user/create', {
-      email: payload.data.email,
+      id: payload.data.id,
+      email: payload.data.email1 + payload.data.email2,
       name: payload.data.name,
       password: payload.data.password
     }, {
       withCredentials: true
     })
       .then((res) => {
-        console.log(res)
-        // commit("createdUser", res.data);
+        commit("createUser", res.data)
       })
       .catch((err) => {
         console.error(err)
+      })
+  },
+  isUser ({ commit }, payload) {
+    commit("duplicateStatus", [])
+    this.$axios.post('/user/check', {
+      type: payload.type,
+      data: payload.data
+    })
+      .then((res) => {
+        commit("duplicateStatus", res.data)
+      })
+      .catch((err) => {
+        console.error(err)
+        alert(`에러가 발생했습니다${err}`)
       })
   }
 }

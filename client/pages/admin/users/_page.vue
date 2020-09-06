@@ -26,7 +26,7 @@
         icon="account-multiple"
       >
         <clients-table-sample
-          :data-url="`${$router.options.base}data-sources/clients.json`"
+          :data-url="`${this.$router.options.base}data-sources/clients.json`"
           :checkable="true"
         />
       </card-component>
@@ -42,7 +42,7 @@
 
       <card-component class="has-table has-mobile-sort-spaced">
         <clients-table-sample
-          :data-url="`${$router.options.base}data-sources/clients.json`"
+          :data-url="`${this.$router.options.base}data-sources/clients.json`"
           :checkable="true"
         />
       </card-component>
@@ -60,6 +60,7 @@
         <clients-table-sample />
       </card-component>
     </section>
+    {{ level }}
   </div>
 </template>
 
@@ -81,7 +82,20 @@ export default {
   computed: {
     titleStack () {
       return ['Admin', 'Users']
+    },
+    userList () {
+      return this.$store.state.users.list
+    },
+    level () {
+      return process.env.level
     }
+  },
+  mounted () {
+    this.$store.dispatch("users/getUserList", {
+      page: this.$route.params.page ? this.$route.params.page : 1,
+      limit: 15,
+      auth: 'user'
+    })
   },
   head () {
     return {

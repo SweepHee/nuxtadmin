@@ -23,6 +23,7 @@
             <img :src="props.row.avatar" class="is-rounded">
           </div>
         </b-table-column>
+
         <b-table-column label="Name" field="name" sortable>
           {{ props.row.name }}
         </b-table-column>

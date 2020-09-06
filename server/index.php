@@ -5,6 +5,9 @@ header("Access-Control-Allow-Methods: POST, GET, PUT, DELETE, OPTIONS");
 header("Access-Control-Allow-Headers: Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization");
 header("Content-type:text/html;charset=utf-8");
 
+/* config */
+require_once(__DIR__."/config/config.php");
+
 /* autoload */
 require_once(__DIR__."/vendor/autoload.php");
 
@@ -19,7 +22,7 @@ require_once(__DIR__."/routes/user.php");
 $request = $_SERVER['REQUEST_URI'];
 $router = explode("/", $request)[1];
 
-$payload = req_to_array();
+$payload = CONVERT_TO_REQUEST();
 
 switch ($router)
 {
@@ -27,7 +30,7 @@ switch ($router)
         require __DIR__ . '/views/index.php';
         break;
     case 'user' :
-        userRouter($request, $payload);
+        $test = new app\controller\userController($request, $payload);
         break;
     case '' :
         require __DIR__ . '/views/index.php';

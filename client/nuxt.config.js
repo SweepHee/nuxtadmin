@@ -69,6 +69,12 @@ export default {
    ** https://nuxtjs.org/guide/plugins
    */
   plugins: [{ src: '~/plugins/after-each.js', mode: 'client' }],
+  env: {
+    level: {
+      1: { level: 1, auth: '일반회원1' },
+      2: { level: 2, auth: '일반회원2' }
+    }
+  },
   /*
    ** Auto import components
    ** See https://nuxtjs.org/api/configuration-components
